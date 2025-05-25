@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 210 11% 98%; /* #F8FAFC */
+  --foreground: 217 19% 27%; /* #374151 */
+  --muted: 210 11% 96%; /* #F1F5F9 */
+  --muted-foreground: 215 13% 65%; /* #94A3B8 */
+  --popover: 0 0% 100%; /* #FFFFFF */
+  --popover-foreground: 217 19% 27%; /* #374151 */
+  --card: 0 0% 100%; /* #FFFFFF */
+  --card-foreground: 217 19% 27%; /* #374151 */
+  --border: 214 13% 90%; /* #E2E8F0 */
+  --input: 214 13% 90%; /* #E2E8F0 */
+  --primary: 213 94% 68%; /* #1E40AF */
+  --primary-foreground: 213 100% 99%; /* #EFF6FF */
+  --secondary: 162 63% 41%; /* #059669 */
+  --secondary-foreground: 162 100% 99%; /* #ECFDF5 */
+  --accent: 0 84% 60%; /* #DC2626 */
+  --accent-foreground: 0 100% 99%; /* #FEF2F2 */
+  --destructive: 0 84% 60%; /* #DC2626 */
+  --destructive-foreground: 0 100% 99%; /* #FEF2F2 */
+  --ring: 213 94% 68%; /* #1E40AF */
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 217 33% 17%; /* #1E293B */
+  --foreground: 213 31% 91%; /* #E2E8F0 */
+  --muted: 217 33% 21%; /* #334155 */
+  --muted-foreground: 215 20% 65%; /* #94A3B8 */
+  --popover: 217 33% 17%; /* #1E293B */
+  --popover-foreground: 213 31% 91%; /* #E2E8F0 */
+  --card: 217 33% 17%; /* #1E293B */
+  --card-foreground: 213 31% 91%; /* #E2E8F0 */
+  --border: 217 33% 21%; /* #334155 */
+  --input: 217 33% 21%; /* #334155 */
+  --primary: 213 94% 68%; /* #1E40AF */
+  --primary-foreground: 213 100% 99%; /* #EFF6FF */
+  --secondary: 162 63% 41%; /* #059669 */
+  --secondary-foreground: 162 100% 99%; /* #ECFDF5 */
+  --accent: 0 84% 60%; /* #DC2626 */
+  --accent-foreground: 0 100% 99%; /* #FEF2F2 */
+  --destructive: 0 84% 60%; /* #DC2626 */
+  --destructive-foreground: 0 100% 99%; /* #FEF2F2 */
+  --ring: 213 94% 68%; /* #1E40AF */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold;
+  }
+}
+
+@layer components {
+  .surface {
+    background-color: hsl(var(--background));
+  }
+}
+
+/* Custom animations for typing indicator */
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+/* Scrollbar styling */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+/* Loading spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Focus improvements */
+.focus-visible {
+  @apply outline-none ring-2 ring-primary ring-offset-2;
+}
+
+/* Button hover effects */
+.btn-primary {
+  @apply bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-primary;
+}
+
+.btn-secondary {
+  @apply bg-secondary text-secondary-foreground hover:bg-secondary/90 focus-visible:ring-secondary;
+}
+
+/* Card shadows */
+.shadow-card {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.shadow-card-hover {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .sidebar-mobile {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .sidebar-mobile.open {
+    transform: translateX(0);
+  }
+}
+
+/* Status indicators */
+.status-pending {
+  @apply bg-yellow-100 text-yellow-800 border-yellow-200;
+}
+
+.status-approved {
+  @apply bg-green-100 text-green-800 border-green-200;
+}
+
+.status-rejected {
+  @apply bg-red-100 text-red-800 border-red-200;
+}
+
+.status-completed {
+  @apply bg-blue-100 text-blue-800 border-blue-200;
+}
+
+/* Priority indicators */
+.priority-normal {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.priority-important {
+  @apply bg-orange-100 text-orange-800;
+}
+
+.priority-urgent {
+  @apply bg-red-100 text-red-800;
+}
