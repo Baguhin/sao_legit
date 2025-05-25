@@ -47,6 +47,8 @@ function getSession() {
 
 // Auth middleware
 async function requireAuth(req: AuthenticatedRequest, res: Response, next: any) {
+  console.log("Session check:", req.session?.userId);
+  
   if (!req.session?.userId) {
     return res.status(401).json({ message: "Authentication required" });
   }
@@ -66,6 +68,7 @@ async function requireAuth(req: AuthenticatedRequest, res: Response, next: any) 
     };
     next();
   } catch (error) {
+    console.error("Auth error:", error);
     return res.status(500).json({ message: "Server error" });
   }
 }
@@ -77,7 +80,10 @@ async function requireAdmin(req: AuthenticatedRequest, res: Response, next: any)
   
   try {
     const user = await storage.getUser(req.session.userId);
-    if (!user || user.role !== "admin") {
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+    if (user.role !== "admin") {
       return res.status(403).json({ message: "Admin access required" });
     }
     req.user = {
