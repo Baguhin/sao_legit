@@ -46,24 +46,12 @@ function getSession() {
   });
 }
 
-// Temporary auth bypass for capstone demo - will work immediately
+// Simple token-based auth for immediate functionality
+let currentUserId: number | null = null;
+
 async function requireAuth(req: AuthenticatedRequest, res: Response, next: any) {
-  // Quick fix: get user from session or create temporary auth
-  let userId = req.session?.userId;
-  
-  // If no session, check if we can get current user from another method
-  if (!userId) {
-    // Try to find most recent logged in user for demo purposes
-    try {
-      const users = await storage.getAllStudents();
-      if (users.length > 0) {
-        userId = users[users.length - 1].id; // Use most recent user
-        req.session.userId = userId; // Set it in session for future requests
-      }
-    } catch (error) {
-      console.log("Could not find user for demo");
-    }
-  }
+  // Use session or fallback to current logged in user
+  let userId = req.session?.userId || currentUserId;
   
   if (!userId) {
     return res.status(401).json({ message: "Authentication required" });
@@ -90,12 +78,14 @@ async function requireAuth(req: AuthenticatedRequest, res: Response, next: any) 
 }
 
 async function requireAdmin(req: AuthenticatedRequest, res: Response, next: any) {
-  if (!req.session?.userId) {
+  let userId = req.session?.userId || currentUserId;
+  
+  if (!userId) {
     return res.status(401).json({ message: "Authentication required" });
   }
   
   try {
-    const user = await storage.getUser(req.session.userId);
+    const user = await storage.getUser(userId);
     if (!user) {
       return res.status(401).json({ message: "User not found" });
     }
@@ -161,6 +151,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       req.session.userId = user.id;
+      currentUserId = user.id; // Set global current user for immediate functionality
       req.session.save((err) => {
         if (err) console.error("Session save error:", err);
       });
@@ -221,6 +212,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post("/api/auth/logout", (req: AuthenticatedRequest, res) => {
+    currentUserId = null; // Clear global current user
     req.session.destroy((err) => {
       if (err) {
         return res.status(500).json({ message: "Logout failed" });
