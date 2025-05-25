@@ -1,11 +1,29 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AlertCircle, MessageSquare, Calendar, FileText, Users, X } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  AlertCircle,
+  MessageSquare,
+  Calendar,
+  FileText,
+  Users,
+  X,
+} from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
@@ -59,13 +77,13 @@ export default function Landing() {
 
     try {
       await apiRequest("POST", "/api/auth/register", userData);
-      
+
       // Auto-login after registration
       await apiRequest("POST", "/api/auth/login", {
         email: userData.email,
         password: userData.password,
       });
-      
+
       toast({
         title: "Success",
         description: "Account created and logged in successfully!",
@@ -94,17 +112,19 @@ export default function Landing() {
                 <Users className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">SAO Connect</h1>
-                <p className="text-sm text-gray-600">Student Affairs Office Portal</p>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  SAO Connect
+                </h1>
+                <p className="text-sm text-gray-600">
+                  Student Affairs Office Portal
+                </p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <Button variant="outline" onClick={() => setShowLogin(true)}>
                 Sign In
               </Button>
-              <Button onClick={() => setShowRegister(true)}>
-                Get Started
-              </Button>
+              <Button onClick={() => setShowRegister(true)}>Get Started</Button>
             </div>
           </div>
         </div>
@@ -119,19 +139,26 @@ export default function Landing() {
               <span className="text-blue-600 block">Academic Excellence</span>
             </h1>
             <p className="text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Connect instantly with your Student Affairs Office. Schedule appointments, 
-              submit requests, and get real-time support for all your academic needs.
+              Connect instantly with your Student Affairs Office. Schedule
+              appointments, submit requests, and get real-time support for all
+              your academic needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-              <Button size="lg" className="text-lg px-8 py-6" onClick={() => setShowRegister(true)}>
+              <Button
+                size="lg"
+                className="text-lg px-8 py-6"
+                onClick={() => setShowRegister(true)}
+              >
                 Get Started Free
               </Button>
-              <Button variant="outline" size="lg" className="text-lg px-8 py-6" onClick={() => setShowLogin(true)}>
+              <Button
+                variant="outline"
+                size="lg"
+                className="text-lg px-8 py-6"
+                onClick={() => setShowLogin(true)}
+              >
                 Sign In
               </Button>
-            </div>
-            <div className="text-sm text-gray-500 pt-4">
-              Demo access: <code className="bg-gray-100 px-2 py-1 rounded">admin / admin123</code>
             </div>
           </div>
         </div>
@@ -141,43 +168,65 @@ export default function Landing() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Everything You Need</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Everything You Need
+            </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Comprehensive tools to manage your academic journey and stay connected with your institution.
+              Comprehensive tools to manage your academic journey and stay
+              connected with your institution.
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center space-y-4 p-6 rounded-xl hover:bg-gray-50 transition-colors">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
                 <MessageSquare className="w-8 h-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900">Real-time Messaging</h3>
-              <p className="text-gray-600">Instant communication with SAO staff for quick support and guidance.</p>
+              <h3 className="text-xl font-semibold text-gray-900">
+                Real-time Messaging
+              </h3>
+              <p className="text-gray-600">
+                Instant communication with SAO staff for quick support and
+                guidance.
+              </p>
             </div>
-            
+
             <div className="text-center space-y-4 p-6 rounded-xl hover:bg-gray-50 transition-colors">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
                 <Calendar className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900">Smart Scheduling</h3>
-              <p className="text-gray-600">Book appointments easily and manage your academic calendar efficiently.</p>
+              <h3 className="text-xl font-semibold text-gray-900">
+                Smart Scheduling
+              </h3>
+              <p className="text-gray-600">
+                Book appointments easily and manage your academic calendar
+                efficiently.
+              </p>
             </div>
-            
+
             <div className="text-center space-y-4 p-6 rounded-xl hover:bg-gray-50 transition-colors">
               <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
                 <FileText className="w-8 h-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900">Document Requests</h3>
-              <p className="text-gray-600">Submit and track official document requests with real-time updates.</p>
+              <h3 className="text-xl font-semibold text-gray-900">
+                Document Requests
+              </h3>
+              <p className="text-gray-600">
+                Submit and track official document requests with real-time
+                updates.
+              </p>
             </div>
-            
+
             <div className="text-center space-y-4 p-6 rounded-xl hover:bg-gray-50 transition-colors">
               <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto">
                 <AlertCircle className="w-8 h-8 text-orange-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900">Live Updates</h3>
-              <p className="text-gray-600">Stay informed with important announcements and notifications.</p>
+              <h3 className="text-xl font-semibold text-gray-900">
+                Live Updates
+              </h3>
+              <p className="text-gray-600">
+                Stay informed with important announcements and notifications.
+              </p>
             </div>
           </div>
         </div>
@@ -187,15 +236,28 @@ export default function Landing() {
       <section className="py-20 bg-blue-600">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto space-y-8">
-            <h2 className="text-4xl font-bold text-white">Ready to Get Started?</h2>
+            <h2 className="text-4xl font-bold text-white">
+              Ready to Get Started?
+            </h2>
             <p className="text-xl text-blue-100">
-              Join thousands of students already using SAO Connect to streamline their academic experience.
+              Join thousands of students already using SAO Connect to streamline
+              their academic experience.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" className="text-lg px-8 py-6" onClick={() => setShowRegister(true)}>
+              <Button
+                size="lg"
+                variant="secondary"
+                className="text-lg px-8 py-6"
+                onClick={() => setShowRegister(true)}
+              >
                 Create Your Account
               </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-white text-white hover:bg-white hover:text-blue-600" onClick={() => setShowLogin(true)}>
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-lg px-8 py-6 border-white text-white hover:bg-white hover:text-blue-600"
+                onClick={() => setShowLogin(true)}
+              >
                 Sign In Now
               </Button>
             </div>
@@ -233,9 +295,6 @@ export default function Landing() {
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
-            <div className="text-center text-sm text-gray-600">
-              Admin access: <code className="bg-gray-100 px-2 py-1 rounded">admin / admin123</code>
-            </div>
           </form>
         </DialogContent>
       </Dialog>
@@ -302,7 +361,6 @@ export default function Landing() {
           </form>
         </DialogContent>
       </Dialog>
-
     </div>
   );
 }
