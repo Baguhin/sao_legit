@@ -4,19 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { 
-  Home, 
-  MessageSquare, 
-  Calendar, 
-  FileText, 
-  Megaphone, 
+import {
+  Home,
+  MessageSquare,
+  Calendar,
+  FileText,
+  Megaphone,
   LogOut,
   Bell,
   Plus,
   Clock,
   CheckCircle,
   AlertCircle,
-  GraduationCap
+  GraduationCap,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -64,9 +64,15 @@ export default function StudentDashboard() {
     }
   };
 
-  const upcomingAppointments = appointments.filter(apt => apt.status === "approved");
-  const pendingAppointments = appointments.filter(apt => apt.status === "pending");
-  const activeRequests = requests.filter(req => req.status !== "completed" && req.status !== "rejected");
+  const upcomingAppointments = appointments.filter(
+    (apt) => apt.status === "approved",
+  );
+  const pendingAppointments = appointments.filter(
+    (apt) => apt.status === "pending",
+  );
+  const activeRequests = requests.filter(
+    (req) => req.status !== "completed" && req.status !== "rejected",
+  );
 
   const navigationItems = [
     { id: "dashboard", label: "Dashboard", icon: Home },
@@ -100,7 +106,9 @@ export default function StudentDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Active Requests</p>
-                <p className="text-2xl font-bold text-gray-900">{activeRequests.length}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {activeRequests.length}
+                </p>
               </div>
               <div className="bg-blue-100 p-3 rounded-lg">
                 <FileText className="text-primary" />
@@ -114,7 +122,9 @@ export default function StudentDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Appointments</p>
-                <p className="text-2xl font-bold text-gray-900">{upcomingAppointments.length}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {upcomingAppointments.length}
+                </p>
               </div>
               <div className="bg-green-100 p-3 rounded-lg">
                 <Calendar className="text-secondary" />
@@ -142,7 +152,9 @@ export default function StudentDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Announcements</p>
-                <p className="text-2xl font-bold text-gray-900">{announcements.length}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {announcements.length}
+                </p>
               </div>
               <div className="bg-yellow-100 p-3 rounded-lg">
                 <Megaphone className="text-yellow-600" />
@@ -166,9 +178,12 @@ export default function StudentDashboard() {
                     <FileText className="text-primary text-sm" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">Request submitted</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      Request submitted
+                    </p>
                     <p className="text-xs text-gray-600">
-                      {request.requestType} - {format(new Date(request.createdAt), "MMM d, h:mm a")}
+                      {request.requestType} -{" "}
+                      {format(new Date(request.createdAt), "MMM d, h:mm a")}
                     </p>
                   </div>
                 </div>
@@ -191,7 +206,7 @@ export default function StudentDashboard() {
                 <Calendar className="text-xl text-gray-600" />
                 <span className="text-sm font-medium">Book Appointment</span>
               </Button>
-              
+
               <Button
                 variant="outline"
                 className="h-20 flex flex-col items-center space-y-2"
@@ -200,7 +215,7 @@ export default function StudentDashboard() {
                 <Plus className="text-xl text-gray-600" />
                 <span className="text-sm font-medium">Submit Request</span>
               </Button>
-              
+
               <Button
                 variant="outline"
                 className="h-20 flex flex-col items-center space-y-2"
@@ -209,7 +224,7 @@ export default function StudentDashboard() {
                 <MessageSquare className="text-xl text-gray-600" />
                 <span className="text-sm font-medium">Send Message</span>
               </Button>
-              
+
               <Button
                 variant="outline"
                 className="h-20 flex flex-col items-center space-y-2"
@@ -229,7 +244,9 @@ export default function StudentDashboard() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">My Appointments</h2>
+          <h2 className="text-xl font-semibold text-gray-900">
+            My Appointments
+          </h2>
           <p className="text-gray-600">Manage your scheduled appointments</p>
         </div>
         <Button onClick={() => setShowAppointmentForm(true)}>
@@ -248,24 +265,37 @@ export default function StudentDashboard() {
             <div className="space-y-4">
               {upcomingAppointments.length > 0 ? (
                 upcomingAppointments.map((appointment) => (
-                  <div key={appointment.id} className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <div
+                    key={appointment.id}
+                    className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200"
+                  >
                     <div className="flex items-center space-x-4">
                       <div className="bg-primary text-white w-12 h-12 rounded-lg flex items-center justify-center">
                         <Calendar />
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-900">{appointment.appointmentType}</p>
-                        <p className="text-sm text-gray-600">
-                          {format(new Date(appointment.preferredDate), "MMM d, yyyy")} at {appointment.preferredTime}
+                        <p className="font-semibold text-gray-900">
+                          {appointment.appointmentType}
                         </p>
-                        <p className="text-sm text-gray-600">{appointment.reason}</p>
+                        <p className="text-sm text-gray-600">
+                          {format(
+                            new Date(appointment.preferredDate),
+                            "MMM d, yyyy",
+                          )}{" "}
+                          at {appointment.preferredTime}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          {appointment.reason}
+                        </p>
                       </div>
                     </div>
                     <Badge className="bg-secondary text-white">Confirmed</Badge>
                   </div>
                 ))
               ) : (
-                <p className="text-gray-500 text-center py-8">No upcoming appointments</p>
+                <p className="text-gray-500 text-center py-8">
+                  No upcoming appointments
+                </p>
               )}
             </div>
           </CardContent>
@@ -280,20 +310,36 @@ export default function StudentDashboard() {
             <CardContent>
               <div className="space-y-4">
                 {pendingAppointments.map((appointment) => (
-                  <div key={appointment.id} className="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <div
+                    key={appointment.id}
+                    className="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border border-yellow-200"
+                  >
                     <div className="flex items-center space-x-4">
                       <div className="bg-yellow-600 text-white w-12 h-12 rounded-lg flex items-center justify-center">
                         <Clock />
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-900">{appointment.appointmentType}</p>
-                        <p className="text-sm text-gray-600">
-                          {format(new Date(appointment.preferredDate), "MMM d, yyyy")} at {appointment.preferredTime}
+                        <p className="font-semibold text-gray-900">
+                          {appointment.appointmentType}
                         </p>
-                        <p className="text-sm text-gray-600">{appointment.reason}</p>
+                        <p className="text-sm text-gray-600">
+                          {format(
+                            new Date(appointment.preferredDate),
+                            "MMM d, yyyy",
+                          )}{" "}
+                          at {appointment.preferredTime}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          {appointment.reason}
+                        </p>
                       </div>
                     </div>
-                    <Badge variant="outline" className="border-yellow-600 text-yellow-600">Pending</Badge>
+                    <Badge
+                      variant="outline"
+                      className="border-yellow-600 text-yellow-600"
+                    >
+                      Pending
+                    </Badge>
                   </div>
                 ))}
               </div>
@@ -322,27 +368,42 @@ export default function StudentDashboard() {
           <div className="space-y-4">
             {requests.length > 0 ? (
               requests.map((request) => (
-                <div key={request.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                <div
+                  key={request.id}
+                  className="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
+                >
                   <div className="flex items-center space-x-4">
                     <div className="bg-blue-100 p-3 rounded-lg">
                       <FileText className="text-primary" />
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">{request.requestType}</p>
-                      <p className="text-sm text-gray-600">
-                        Submitted {format(new Date(request.createdAt), "MMM d, yyyy")}
+                      <p className="font-semibold text-gray-900">
+                        {request.requestType}
                       </p>
-                      <p className="text-sm text-gray-600">{request.description}</p>
+                      <p className="text-sm text-gray-600">
+                        Submitted{" "}
+                        {format(new Date(request.createdAt), "MMM d, yyyy")}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        {request.description}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Badge 
-                      variant={request.status === "completed" ? "default" : 
-                               request.status === "pending" ? "secondary" : "outline"}
+                    <Badge
+                      variant={
+                        request.status === "completed"
+                          ? "default"
+                          : request.status === "pending"
+                            ? "secondary"
+                            : "outline"
+                      }
                       className={
-                        request.status === "completed" ? "bg-green-100 text-green-800" :
-                        request.status === "pending" ? "bg-yellow-100 text-yellow-800" :
-                        "bg-blue-100 text-blue-800"
+                        request.status === "completed"
+                          ? "bg-green-100 text-green-800"
+                          : request.status === "pending"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-blue-100 text-blue-800"
                       }
                     >
                       {request.status}
@@ -351,7 +412,9 @@ export default function StudentDashboard() {
                 </div>
               ))
             ) : (
-              <p className="text-gray-500 text-center py-8">No requests submitted yet</p>
+              <p className="text-gray-500 text-center py-8">
+                No requests submitted yet
+              </p>
             )}
           </div>
         </CardContent>
@@ -363,7 +426,9 @@ export default function StudentDashboard() {
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-semibold text-gray-900">Announcements</h2>
-        <p className="text-gray-600">Stay updated with important information from Student Affairs</p>
+        <p className="text-gray-600">
+          Stay updated with important information from Student Affairs
+        </p>
       </div>
 
       <div className="space-y-4">
@@ -372,10 +437,15 @@ export default function StudentDashboard() {
             <Card key={announcement.id}>
               <CardContent className="p-6">
                 <div className="flex items-start space-x-4">
-                  <div className={`p-3 rounded-lg ${
-                    announcement.priority === "urgent" ? "bg-red-100" :
-                    announcement.priority === "important" ? "bg-orange-100" : "bg-blue-100"
-                  }`}>
+                  <div
+                    className={`p-3 rounded-lg ${
+                      announcement.priority === "urgent"
+                        ? "bg-red-100"
+                        : announcement.priority === "important"
+                          ? "bg-orange-100"
+                          : "bg-blue-100"
+                    }`}
+                  >
                     {announcement.priority === "urgent" ? (
                       <AlertCircle className="text-red-600" />
                     ) : (
@@ -384,14 +454,22 @@ export default function StudentDashboard() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold text-gray-900">{announcement.title}</h3>
+                      <h3 className="font-semibold text-gray-900">
+                        {announcement.title}
+                      </h3>
                       <span className="text-sm text-gray-500">
-                        {format(new Date(announcement.createdAt), "MMM d, yyyy")}
+                        {format(
+                          new Date(announcement.createdAt),
+                          "MMM d, yyyy",
+                        )}
                       </span>
                     </div>
                     <p className="text-gray-700 mb-3">{announcement.content}</p>
                     <div className="flex items-center space-x-4 text-sm text-gray-500">
-                      <span>Posted by {announcement.creator?.firstName} {announcement.creator?.lastName}</span>
+                      <span>
+                        Posted by {announcement.creator?.firstName}{" "}
+                        {announcement.creator?.lastName}
+                      </span>
                       <span>{announcement.views} views</span>
                     </div>
                   </div>
@@ -421,11 +499,13 @@ export default function StudentDashboard() {
               <GraduationCap className="text-primary text-2xl" />
               <div>
                 <h2 className="font-bold text-gray-900">SAO Connect</h2>
-                <p className="text-sm text-gray-600">{user?.firstName} {user?.lastName}</p>
+                <p className="text-sm text-gray-600">
+                  {user?.firstName} {user?.lastName}
+                </p>
               </div>
             </div>
           </div>
-          
+
           <nav className="mt-6">
             <div className="px-6 space-y-2">
               {navigationItems.map((item) => (
@@ -449,7 +529,7 @@ export default function StudentDashboard() {
               ))}
             </div>
           </nav>
-          
+
           <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-200">
             <Button
               variant="ghost"
@@ -469,9 +549,12 @@ export default function StudentDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  {navigationItems.find(item => item.id === activeSection)?.label || "Dashboard"}
+                  {navigationItems.find((item) => item.id === activeSection)
+                    ?.label || "Dashboard"}
                 </h1>
-                <p className="text-gray-600">Welcome back, {user?.firstName}!</p>
+                <p className="text-gray-600">
+                  Welcome back, {user?.firstName}!
+                </p>
               </div>
               <div className="flex items-center space-x-4">
                 <Button variant="ghost" size="sm" className="relative">
@@ -481,28 +564,24 @@ export default function StudentDashboard() {
                   </Badge>
                 </Button>
                 <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-semibold">
-                  {user?.firstName?.[0]}{user?.lastName?.[0]}
+                  {user?.firstName?.[0]}
+                  {user?.lastName?.[0]}
                 </div>
               </div>
             </div>
           </header>
 
           {/* Content */}
-          <div className="p-6">
-            {renderContent()}
-          </div>
+          <div className="p-6">{renderContent()}</div>
         </div>
       </div>
 
       {/* Modals */}
-      <AppointmentForm 
-        open={showAppointmentForm} 
-        onOpenChange={setShowAppointmentForm} 
+      <AppointmentForm
+        open={showAppointmentForm}
+        onOpenChange={setShowAppointmentForm}
       />
-      <RequestForm 
-        open={showRequestForm} 
-        onOpenChange={setShowRequestForm} 
-      />
+      <RequestForm open={showRequestForm} onOpenChange={setShowRequestForm} />
     </div>
   );
 }
