@@ -10,15 +10,17 @@ export interface User {
 }
 
 export function useAuth() {
-  const { data: user, isLoading, refetch } = useQuery<User>({
+  const { data: user, isLoading, refetch, error } = useQuery<User>({
     queryKey: ["/api/auth/user"],
     retry: false,
+    retryOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   return {
     user,
     isLoading,
-    isAuthenticated: !!user,
+    isAuthenticated: !!user && !error,
     refetch,
   };
 }
