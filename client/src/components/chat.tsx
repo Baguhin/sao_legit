@@ -41,12 +41,17 @@ export function Chat({ isAdmin = false }: ChatProps) {
   // Get messages for selected conversation
   const { data: messages = [], refetch: refetchMessages } = useQuery<Message[]>({
     queryKey: ["/api/messages", selectedUserId || "admin"],
-    queryFn: () => {
+    queryFn: async () => {
       const params = new URLSearchParams();
       if (selectedUserId) {
         params.append("with", selectedUserId.toString());
       }
-      return fetch(`/api/messages?${params}`, { credentials: "include" }).then(res => res.json());
+      const res = await fetch(`/api/messages?${params}`, { credentials: "include" });
+      if (!res.ok) {
+        return [];
+      }
+      const data = await res.json();
+      return Array.isArray(data) ? data : [];
     },
     enabled: !!selectedUserId || !isAdmin,
   });

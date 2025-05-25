@@ -46,18 +46,52 @@ function getSession() {
 }
 
 // Auth middleware
-function requireAuth(req: AuthenticatedRequest, res: Response, next: any) {
-  if (!req.user) {
+async function requireAuth(req: AuthenticatedRequest, res: Response, next: any) {
+  if (!req.session?.userId) {
     return res.status(401).json({ message: "Authentication required" });
   }
-  next();
+  
+  try {
+    const user = await storage.getUser(req.session.userId);
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+    req.user = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      studentId: user.studentId || undefined,
+    };
+    next();
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
 }
 
-function requireAdmin(req: AuthenticatedRequest, res: Response, next: any) {
-  if (!req.user || req.user.role !== "admin") {
-    return res.status(403).json({ message: "Admin access required" });
+async function requireAdmin(req: AuthenticatedRequest, res: Response, next: any) {
+  if (!req.session?.userId) {
+    return res.status(401).json({ message: "Authentication required" });
   }
-  next();
+  
+  try {
+    const user = await storage.getUser(req.session.userId);
+    if (!user || user.role !== "admin") {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    req.user = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      studentId: user.studentId || undefined,
+    };
+    next();
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
