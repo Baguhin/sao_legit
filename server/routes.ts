@@ -34,14 +34,15 @@ function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
   return session({
     secret: process.env.SESSION_SECRET || "sao-connect-secret-key-dev",
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     cookie: {
       httpOnly: true,
       secure: false, // Set to true in production with HTTPS
       maxAge: sessionTtl,
       sameSite: 'lax',
     },
+    name: 'sao-connect-session',
   });
 }
 
@@ -140,6 +141,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       req.session.userId = user.id;
+      req.session.save((err) => {
+        if (err) console.error("Session save error:", err);
+      });
       req.user = {
         id: user.id,
         email: user.email,
