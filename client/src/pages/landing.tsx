@@ -113,44 +113,33 @@ export default function Landing() {
             </div>
 
             {/* Features Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="group flex items-center space-x-4 p-5 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300 cursor-pointer">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <MessageSquare className="w-6 h-6 text-white" />
-                </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm">
+                <MessageSquare className="w-8 h-8 text-blue-600" />
                 <div>
-                  <h3 className="font-bold text-white">Instant Messaging</h3>
-                  <p className="text-blue-200 text-sm">Real-time chat with SAO staff</p>
+                  <h3 className="font-semibold text-gray-900">Real-time Chat</h3>
+                  <p className="text-sm text-gray-600">Instant messaging with SAO staff</p>
                 </div>
               </div>
-              
-              <div className="group flex items-center space-x-4 p-5 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300 cursor-pointer">
-                <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Calendar className="w-6 h-6 text-white" />
-                </div>
+              <div className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm">
+                <Calendar className="w-8 h-8 text-green-600" />
                 <div>
-                  <h3 className="font-bold text-white">Smart Scheduling</h3>
-                  <p className="text-blue-200 text-sm">Book appointments effortlessly</p>
+                  <h3 className="font-semibold text-gray-900">Appointments</h3>
+                  <p className="text-sm text-gray-600">Schedule meetings easily</p>
                 </div>
               </div>
-              
-              <div className="group flex items-center space-x-4 p-5 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300 cursor-pointer">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <FileText className="w-6 h-6 text-white" />
-                </div>
+              <div className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm">
+                <FileText className="w-8 h-8 text-purple-600" />
                 <div>
-                  <h3 className="font-bold text-white">Document Hub</h3>
-                  <p className="text-blue-200 text-sm">Submit & track requests</p>
+                  <h3 className="font-semibold text-gray-900">Requests</h3>
+                  <p className="text-sm text-gray-600">Submit official documents</p>
                 </div>
               </div>
-              
-              <div className="group flex items-center space-x-4 p-5 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 hover:bg-white/20 transition-all duration-300 cursor-pointer">
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <AlertCircle className="w-6 h-6 text-white" />
-                </div>
+              <div className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm">
+                <AlertCircle className="w-8 h-8 text-orange-600" />
                 <div>
-                  <h3 className="font-bold text-white">Live Updates</h3>
-                  <p className="text-blue-200 text-sm">Stay informed with notifications</p>
+                  <h3 className="font-semibold text-gray-900">Announcements</h3>
+                  <p className="text-sm text-gray-600">Stay updated with news</p>
                 </div>
               </div>
             </div>
@@ -158,155 +147,104 @@ export default function Landing() {
 
           {/* Auth Forms */}
           <div className="flex justify-center">
-            <Card className="w-full max-w-md shadow-2xl bg-white/95 backdrop-blur-xl border-0">
-              <CardHeader className="text-center pb-8">
-                <div className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4">
-                  <Shield className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                  Welcome Back
-                </CardTitle>
-                <CardDescription className="text-lg text-gray-600">
-                  Access your student portal or create your account
+            <Card className="w-full max-w-md shadow-xl">
+              <CardHeader className="text-center">
+                <CardTitle className="text-2xl">Welcome</CardTitle>
+                <CardDescription>
+                  Sign in to your account or create a new one
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <Tabs defaultValue="login" className="space-y-6">
-                  <TabsList className="grid w-full grid-cols-2 bg-gray-100 p-1 rounded-xl">
-                    <TabsTrigger value="login" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-                      Sign In
-                    </TabsTrigger>
-                    <TabsTrigger value="register" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
-                      Sign Up
-                    </TabsTrigger>
+              <CardContent>
+                <Tabs defaultValue="login" className="space-y-4">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="login">Sign In</TabsTrigger>
+                    <TabsTrigger value="register">Sign Up</TabsTrigger>
                   </TabsList>
                   
                   <TabsContent value="login" className="space-y-4">
                     <form onSubmit={handleLogin} className="space-y-4">
                       <div className="space-y-2">
-                        <Label htmlFor="login-email" className="text-sm font-semibold text-gray-700">
-                          Email or Username
-                        </Label>
+                        <Label htmlFor="login-email">Email or Username</Label>
                         <Input
                           id="login-email"
                           name="email"
                           type="text"
                           placeholder="Enter email or 'admin' for staff"
-                          className="h-12 border-2 border-gray-200 focus:border-blue-500 rounded-xl"
                           required
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="login-password" className="text-sm font-semibold text-gray-700">
-                          Password
-                        </Label>
+                        <Label htmlFor="login-password">Password</Label>
                         <Input
                           id="login-password"
                           name="password"
                           type="password"
                           placeholder="Enter password"
-                          className="h-12 border-2 border-gray-200 focus:border-blue-500 rounded-xl"
                           required
                         />
                       </div>
-                      <Button 
-                        type="submit" 
-                        className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105" 
-                        disabled={isLoading}
-                      >
-                        {isLoading ? "Signing in..." : (
-                          <div className="flex items-center space-x-2">
-                            <span>Sign In</span>
-                            <ArrowRight className="w-4 h-4" />
-                          </div>
-                        )}
+                      <Button type="submit" className="w-full" disabled={isLoading}>
+                        {isLoading ? "Signing in..." : "Sign In"}
                       </Button>
-                      <div className="text-center p-4 bg-blue-50 rounded-xl">
-                        <div className="text-sm text-gray-600 mb-2">Demo Admin Access:</div>
-                        <code className="bg-white px-3 py-1 rounded-lg text-blue-700 font-mono text-sm">
-                          admin / admin123
-                        </code>
+                      <div className="text-center text-sm text-gray-600">
+                        Admin access: <code className="bg-gray-100 px-2 py-1 rounded">admin / admin123</code>
                       </div>
                     </form>
                   </TabsContent>
                   
                   <TabsContent value="register" className="space-y-4">
                     <form onSubmit={handleRegister} className="space-y-4">
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-2 gap-2">
                         <div className="space-y-2">
-                          <Label htmlFor="firstName" className="text-sm font-semibold text-gray-700">
-                            First Name
-                          </Label>
+                          <Label htmlFor="firstName">First Name</Label>
                           <Input
                             id="firstName"
                             name="firstName"
                             placeholder="John"
-                            className="h-11 border-2 border-gray-200 focus:border-blue-500 rounded-xl"
                             required
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="lastName" className="text-sm font-semibold text-gray-700">
-                            Last Name
-                          </Label>
+                          <Label htmlFor="lastName">Last Name</Label>
                           <Input
                             id="lastName"
                             name="lastName"
                             placeholder="Doe"
-                            className="h-11 border-2 border-gray-200 focus:border-blue-500 rounded-xl"
                             required
                           />
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="studentId" className="text-sm font-semibold text-gray-700">
-                          Student ID
-                        </Label>
+                        <Label htmlFor="studentId">Student ID</Label>
                         <Input
                           id="studentId"
                           name="studentId"
                           placeholder="2024-00001"
-                          className="h-11 border-2 border-gray-200 focus:border-blue-500 rounded-xl"
                           required
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="register-email" className="text-sm font-semibold text-gray-700">
-                          Email
-                        </Label>
+                        <Label htmlFor="register-email">Email</Label>
                         <Input
                           id="register-email"
                           name="email"
                           type="email"
                           placeholder="john.doe@university.edu"
-                          className="h-11 border-2 border-gray-200 focus:border-blue-500 rounded-xl"
                           required
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="register-password" className="text-sm font-semibold text-gray-700">
-                          Password
-                        </Label>
+                        <Label htmlFor="register-password">Password</Label>
                         <Input
                           id="register-password"
                           name="password"
                           type="password"
                           placeholder="Create password"
-                          className="h-11 border-2 border-gray-200 focus:border-blue-500 rounded-xl"
                           required
                         />
                       </div>
-                      <Button 
-                        type="submit" 
-                        className="w-full h-12 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105" 
-                        disabled={isLoading}
-                      >
-                        {isLoading ? "Creating Account..." : (
-                          <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4" />
-                            <span>Create Account</span>
-                          </div>
-                        )}
+                      <Button type="submit" className="w-full" disabled={isLoading}>
+                        {isLoading ? "Creating Account..." : "Create Account"}
                       </Button>
                     </form>
                   </TabsContent>
@@ -317,22 +255,7 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-white/10 bg-white/5 backdrop-blur-xl mt-20">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center space-y-4">
-            <div className="flex items-center justify-center space-x-2">
-              <Star className="w-5 h-5 text-yellow-400" />
-              <span className="text-white font-semibold">Capstone Project 2024</span>
-              <Star className="w-5 h-5 text-yellow-400" />
-            </div>
-            <p className="text-blue-200 text-sm max-w-md mx-auto">
-              Built with modern web technologies for the ultimate student experience. 
-              Connecting students and administrators seamlessly.
-            </p>
-          </div>
-        </div>
-      </footer>
+
     </div>
   );
 }
