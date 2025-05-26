@@ -152,35 +152,13 @@ export function Chat({ isAdmin = false }: ChatProps) {
 
   const messageData = {
     content: messageContent.trim(),
-    receiverId: isAdmin ? selectedUserId : 1, // Students send to admin (ID 1)
+    receiverId: isAdmin ? selectedUserId ?? undefined : 1, // Ensure receiverId is undefined if null
   };
 
-  // Send via WebSocket for real-time delivery
-  sendMessage({
-    senderId: user!.id,
-    receiverId: messageData.receiverId!,
-    content: messageData.content,
-    isFromAdmin: user!.role === "admin",
-  });
-
-  // Save to database
-  sendMessageMutation.mutate(messageData, {
-    onSuccess: () => {
-      // Reset message content here to ensure only one message is sent
-      setMessageContent("");
-      refetchMessages();
-      queryClient.invalidateQueries({ queryKey: ["/api/conversations"] });
-    },
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "Failed to send message",
-        variant: "destructive",
-      });
-    }
-  });
+  // Only save to the database; WebSocket will handle real-time updates
+  sendMessageMutation.mutate(messageData);
 };
-
+  
   const selectedUser = isAdmin
     ? students.find((s) => s.id === selectedUserId)
     : { firstName: "SAO", lastName: "Admin", role: "admin" };
