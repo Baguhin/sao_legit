@@ -39,22 +39,26 @@ export function Chat({ isAdmin = false }: ChatProps) {
   });
 
   // Get messages for selected conversation
-  const { data: messages = [], refetch: refetchMessages } = useQuery<Message[]>({
-    queryKey: ["/api/messages", selectedUserId || "admin"],
-    queryFn: async () => {
-      const params = new URLSearchParams();
-      if (selectedUserId) {
-        params.append("with", selectedUserId.toString());
-      }
-      const res = await fetch(`/api/messages?${params}`, { credentials: "include" });
-      if (!res.ok) {
-        return [];
-      }
-      const data = await res.json();
-      return Array.isArray(data) ? data : [];
+  const { data: messages = [], refetch: refetchMessages } = useQuery<Message[]>(
+    {
+      queryKey: ["/api/messages", selectedUserId || "admin"],
+      queryFn: async () => {
+        const params = new URLSearchParams();
+        if (selectedUserId) {
+          params.append("with", selectedUserId.toString());
+        }
+        const res = await fetch(`/api/messages?${params}`, {
+          credentials: "include",
+        });
+        if (!res.ok) {
+          return [];
+        }
+        const data = await res.json();
+        return Array.isArray(data) ? data : [];
+      },
+      enabled: !!selectedUserId || !isAdmin,
     },
-    enabled: !!selectedUserId || !isAdmin,
-  });
+  );
 
   // Send message mutation
   const sendMessageMutation = useMutation({
@@ -93,7 +97,7 @@ export function Chat({ isAdmin = false }: ChatProps) {
         queryClient.invalidateQueries({ queryKey: ["/api/conversations"] });
       } else if (lastMessage.type === "typing") {
         const { senderId, isTyping } = lastMessage.data;
-        setTypingUsers(prev => {
+        setTypingUsers((prev) => {
           const newSet = new Set(prev);
           if (isTyping) {
             newSet.add(senderId);
@@ -102,10 +106,10 @@ export function Chat({ isAdmin = false }: ChatProps) {
           }
           return newSet;
         });
-        
+
         // Clear typing indicator after 3 seconds
         setTimeout(() => {
-          setTypingUsers(prev => {
+          setTypingUsers((prev) => {
             const newSet = new Set(prev);
             newSet.delete(senderId);
             return newSet;
@@ -134,7 +138,7 @@ export function Chat({ isAdmin = false }: ChatProps) {
   useEffect(() => {
     if (selectedUserId && messages.length > 0) {
       const unreadMessages = messages.filter(
-        msg => msg.senderId === selectedUserId && !msg.isRead
+        (msg) => msg.senderId === selectedUserId && !msg.isRead,
       );
       if (unreadMessages.length > 0) {
         markAsReadMutation.mutate(selectedUserId);
@@ -143,28 +147,42 @@ export function Chat({ isAdmin = false }: ChatProps) {
   }, [selectedUserId, messages, markAsReadMutation]);
 
   const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!messageContent.trim()) return;
+  e.preventDefault();
+  if (!messageContent.trim()) return;
 
-    const messageData = {
-      content: messageContent.trim(),
-      receiverId: isAdmin ? selectedUserId : 1, // Students send to admin (ID 1)
-    };
-
-    // Send via WebSocket for real-time delivery
-    sendMessage({
-      senderId: user!.id,
-      receiverId: messageData.receiverId!,
-      content: messageData.content,
-      isFromAdmin: user!.role === "admin",
-    });
-
-    // Also save to database
-    sendMessageMutation.mutate(messageData);
+  const messageData = {
+    content: messageContent.trim(),
+    receiverId: isAdmin ? selectedUserId : 1, // Students send to admin (ID 1)
   };
 
-  const selectedUser = isAdmin 
-    ? students.find(s => s.id === selectedUserId)
+  // Send via WebSocket for real-time delivery
+  sendMessage({
+    senderId: user!.id,
+    receiverId: messageData.receiverId!,
+    content: messageData.content,
+    isFromAdmin: user!.role === "admin",
+  });
+
+  // Save to database
+  sendMessageMutation.mutate(messageData, {
+    onSuccess: () => {
+      // Reset message content here to ensure only one message is sent
+      setMessageContent("");
+      refetchMessages();
+      queryClient.invalidateQueries({ queryKey: ["/api/conversations"] });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to send message",
+        variant: "destructive",
+      });
+    }
+  });
+};
+
+  const selectedUser = isAdmin
+    ? students.find((s) => s.id === selectedUserId)
     : { firstName: "SAO", lastName: "Admin", role: "admin" };
 
   if (isAdmin) {
@@ -186,12 +204,15 @@ export function Chat({ isAdmin = false }: ChatProps) {
                     key={student.id}
                     onClick={() => setSelectedUserId(student.id)}
                     className={`w-full p-3 rounded-lg text-left hover:bg-gray-50 transition-colors ${
-                      selectedUserId === student.id ? "bg-blue-50 border border-blue-200" : "border border-transparent"
+                      selectedUserId === student.id
+                        ? "bg-blue-50 border border-blue-200"
+                        : "border border-transparent"
                     }`}
                   >
                     <div className="flex items-center space-x-3">
                       <div className="bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm">
-                        {student.firstName[0]}{student.lastName[0]}
+                        {student.firstName[0]}
+                        {student.lastName[0]}
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-gray-900 truncate">
@@ -215,19 +236,22 @@ export function Chat({ isAdmin = false }: ChatProps) {
                 <div className="p-4 border-b border-gray-200">
                   <div className="flex items-center space-x-3">
                     <div className="bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center font-semibold">
-                      {selectedUser.firstName[0]}{selectedUser.lastName[0]}
+                      {selectedUser.firstName[0]}
+                      {selectedUser.lastName[0]}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-900">
                         {selectedUser.firstName} {selectedUser.lastName}
                       </p>
                       <p className="text-sm text-gray-600">
-                        {selectedUser.role === "admin" ? "Administrator" : `Student ID: ${(selectedUser as any).studentId}`}
+                        {selectedUser.role === "admin"
+                          ? "Administrator"
+                          : `Student ID: ${(selectedUser as any).studentId}`}
                       </p>
                     </div>
                   </div>
                 </div>
-                
+
                 <ScrollArea className="flex-1 p-4">
                   <div className="space-y-4">
                     {messages.map((message) => (
@@ -243,9 +267,13 @@ export function Chat({ isAdmin = false }: ChatProps) {
                           }`}
                         >
                           <p className="text-sm">{message.content}</p>
-                          <p className={`text-xs mt-1 ${
-                            message.senderId === user!.id ? "text-blue-200" : "text-gray-500"
-                          }`}>
+                          <p
+                            className={`text-xs mt-1 ${
+                              message.senderId === user!.id
+                                ? "text-blue-200"
+                                : "text-gray-500"
+                            }`}
+                          >
                             {format(new Date(message.createdAt), "h:mm a")}
                           </p>
                         </div>
@@ -256,8 +284,14 @@ export function Chat({ isAdmin = false }: ChatProps) {
                         <div className="bg-gray-100 rounded-lg px-4 py-2">
                           <div className="flex items-center space-x-1">
                             <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
-                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
+                            <div
+                              className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                              style={{ animationDelay: "0.1s" }}
+                            ></div>
+                            <div
+                              className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                              style={{ animationDelay: "0.2s" }}
+                            ></div>
                           </div>
                         </div>
                       </div>
@@ -265,8 +299,11 @@ export function Chat({ isAdmin = false }: ChatProps) {
                     <div ref={messagesEndRef} />
                   </div>
                 </ScrollArea>
-                
-                <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-200">
+
+                <form
+                  onSubmit={handleSendMessage}
+                  className="p-4 border-t border-gray-200"
+                >
                   <div className="flex space-x-2">
                     <Input
                       value={messageContent}
@@ -275,9 +312,11 @@ export function Chat({ isAdmin = false }: ChatProps) {
                       className="flex-1"
                       disabled={sendMessageMutation.isPending}
                     />
-                    <Button 
-                      type="submit" 
-                      disabled={!messageContent.trim() || sendMessageMutation.isPending}
+                    <Button
+                      type="submit"
+                      disabled={
+                        !messageContent.trim() || sendMessageMutation.isPending
+                      }
                       className="bg-primary text-white hover:bg-blue-700"
                     >
                       <Send className="w-4 h-4" />
@@ -287,7 +326,9 @@ export function Chat({ isAdmin = false }: ChatProps) {
               </>
             ) : (
               <div className="flex-1 flex items-center justify-center">
-                <p className="text-gray-500">Select a student to start chatting</p>
+                <p className="text-gray-500">
+                  Select a student to start chatting
+                </p>
               </div>
             )}
           </div>
@@ -321,9 +362,13 @@ export function Chat({ isAdmin = false }: ChatProps) {
                   }`}
                 >
                   <p className="text-sm">{message.content}</p>
-                  <p className={`text-xs mt-1 ${
-                    message.senderId === user!.id ? "text-blue-200" : "text-gray-500"
-                  }`}>
+                  <p
+                    className={`text-xs mt-1 ${
+                      message.senderId === user!.id
+                        ? "text-blue-200"
+                        : "text-gray-500"
+                    }`}
+                  >
                     {format(new Date(message.createdAt), "h:mm a")}
                   </p>
                 </div>
@@ -334,8 +379,14 @@ export function Chat({ isAdmin = false }: ChatProps) {
                 <div className="bg-gray-100 rounded-lg px-4 py-2">
                   <div className="flex items-center space-x-1">
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
+                    <div
+                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                      style={{ animationDelay: "0.1s" }}
+                    ></div>
+                    <div
+                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                      style={{ animationDelay: "0.2s" }}
+                    ></div>
                   </div>
                 </div>
               </div>
@@ -343,8 +394,11 @@ export function Chat({ isAdmin = false }: ChatProps) {
             <div ref={messagesEndRef} />
           </div>
         </ScrollArea>
-        
-        <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-200">
+
+        <form
+          onSubmit={handleSendMessage}
+          className="p-4 border-t border-gray-200"
+        >
           <div className="flex space-x-2">
             <Input
               value={messageContent}
@@ -353,8 +407,8 @@ export function Chat({ isAdmin = false }: ChatProps) {
               className="flex-1"
               disabled={sendMessageMutation.isPending}
             />
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={!messageContent.trim() || sendMessageMutation.isPending}
               className="bg-primary text-white hover:bg-blue-700"
             >
