@@ -1,16 +1,15 @@
 import dotenv from "dotenv";
-dotenv.config(); // Load environment variables from .env
+dotenv.config(); // Load env vars from .env (only in dev/local)
 
-import express, { type Request, Response, NextFunction } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Custom request logger for /api routes
+// Logging middleware
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -50,19 +49,19 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // Setup Vite or static files
+  // Vite dev server or static assets
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
     serveStatic(app);
   }
 
-const port = 5000;
-const host = "127.0.0.1";
+  // ✅ Fix for Render: dynamic port + 0.0.0.0 binding
+  const port = parseInt(process.env.PORT || "5000", 10);
 
-server.listen(port, host, () => {
-  log(`✅ Server is running at http://${host}:${port}`);
-});
+  const host = "0.0.0.0";
 
-
+  server.listen(port, host, () => {
+    log(`✅ Server is running at http://${host}:${port}`);
+  });
 })();
